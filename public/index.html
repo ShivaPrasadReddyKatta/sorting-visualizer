@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sorting Visualizer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="algorithms-container">
+      <h1>Sorting Visualizer</h1>
+      <div class="algorithms">
+        <div class="array-size">
+          <label for="arr-size">Array Size</label
+          ><input
+            type="range"
+            name="arraysize"
+            id="arr-size"
+            min="4"
+            max="200"
+          />
+        </div>
+        <div class="animation-speed">
+          <label for="anim-speed">Anim Speed</label
+          ><input
+            type="range"
+            name="animation speed"
+            id="anim-speed"
+            min="1"
+            max="10"
+          />
+        </div>
+        <button class="new-array">New Array</button>
+
+        <button class="bubble">Bubble</button>
+        <button class="insertion">Insertion</button>
+        <button class="selection">Selection</button>
+        <button class="quick">Quick</button>
+      </div>
+    </div>
+    <div class="data-container"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
