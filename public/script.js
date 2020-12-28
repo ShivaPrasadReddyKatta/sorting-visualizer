@@ -15,14 +15,14 @@ arr_size.addEventListener(
   false
 );
 
-//Disabling all buttons while an algorithm is running to make things simple and easy.
+//Function to disable all the buttons while an algorithm is running to make things simple and easy.
 function disableButtons() {
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].disabled = true;
   }
 }
 
-//Enabling all the buttons after an algorithm finishes running.
+//Function to enable all the buttons after an algorithm finishes running.
 function enableButtons() {
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].disabled = false;
@@ -40,14 +40,14 @@ function generateBlocks(size = 20) {
     block.classList.add("block");
     block.style.height = `${value * 7}px`;
     block.style.width = `${100 / size - 0.1}%`;
-    block.style.transition = `all ${anim_speed.value * 0.01}s ease`;
+    // block.style.transition = `all ${anim_speed.value * 0.01}s ease`;
     container.appendChild(block);
   }
   enableButtons();
 }
 
-//This function is used to swap the blocks while sorting
-function swap(el1, el2) {
+//This swap function is used for bubble sort and insertion sort
+function swapOne(el1, el2) {
   return new Promise(function (resolve) {
     const transform1 = el1.style.transform;
     const transform2 = el2.style.transform;
@@ -58,13 +58,13 @@ function swap(el1, el2) {
       setTimeout(() => {
         container.insertBefore(el2, el1);
         resolve();
-      }, anim_speed.value * 10);
+      }, Math.pow(10, anim_speed.value));
     });
   });
 }
 
-//This swap function is exclusively for selection sort
-function swapSelection(el1, el2) {
+//This swap function is for selection sort and quick sort
+function swapTwo(el1, el2) {
   return new Promise(function (resolve) {
     const transform1 = el1.style.transform;
     const transform2 = el2.style.transform;
@@ -77,12 +77,15 @@ function swapSelection(el1, el2) {
         container.insertBefore(el1, el2);
         container.insertBefore(el2, siblingA);
         resolve();
-      }, anim_speed.value * 10);
+      }, Math.pow(10, anim_speed.value));
     });
   });
 }
 
-//This is the bubble sort algorithm
+/*******************************************************/
+/******************BUBBLE SORT**************************/
+/*******************************************************/
+
 async function bubbleSort() {
   let blocks = document.querySelectorAll(".block");
   for (let i = 0; i < blocks.length - 1; i++) {
@@ -92,12 +95,12 @@ async function bubbleSort() {
       await new Promise(function (resolve) {
         setTimeout(() => {
           resolve();
-        }, anim_speed.value * 10);
+        }, Math.pow(10, anim_speed.value));
       });
-      const value1 = Number(blocks[j].style.height.replace("px", ""));
-      const value2 = Number(blocks[j + 1].style.height.replace("px", ""));
-      if (value1 > value2) {
-        await swap(blocks[j], blocks[j + 1]);
+      if (
+        parseInt(blocks[j].style.height) > parseInt(blocks[j + 1].style.height)
+      ) {
+        await swapOne(blocks[j], blocks[j + 1]);
         blocks = document.querySelectorAll(".block");
       }
       blocks[j].style.background = "cyan";
@@ -107,7 +110,10 @@ async function bubbleSort() {
   enableButtons();
 }
 
-//This is the insertion sort algorithm
+/*******************************************************/
+/*****************INSERTION SORT************************/
+/*******************************************************/
+
 async function insertionSort() {
   let blocks = document.querySelectorAll(".block");
   for (let i = 1; i < blocks.length; i++) {
@@ -115,16 +121,15 @@ async function insertionSort() {
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve();
-      }, anim_speed.value * 10);
+      }, Math.pow(10, anim_speed.value));
     });
     while (
       j > 0 &&
-      Number(blocks[j].style.height.replace("px", "")) <
-        Number(blocks[j - 1].style.height.replace("px", ""))
+      parseInt(blocks[j].style.height) < parseInt(blocks[j - 1].style.height)
     ) {
       blocks[j].style.background = "#ff105e";
       blocks[j - 1].style.background = "#ff105e";
-      await swap(blocks[j - 1], blocks[j]);
+      await swapOne(blocks[j - 1], blocks[j]);
       blocks = document.querySelectorAll(".block");
       j--;
       blocks[j].style.background = "cyan";
@@ -134,7 +139,10 @@ async function insertionSort() {
   enableButtons();
 }
 
-//This is the selection sort algorithm
+/*******************************************************/
+/******************SELECTION SORT***********************/
+/*******************************************************/
+
 async function selectionSort() {
   let blocks = document.querySelectorAll(".block");
   for (let i = 0; i < blocks.length; i++) {
@@ -145,23 +153,27 @@ async function selectionSort() {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve();
-        }, anim_speed.value * 10);
+        }, Math.pow(10, anim_speed.value));
       });
 
       if (
-        Number(blocks[j].style.height.replace("px", "")) <
-        Number(blocks[min_ind].style.height.replace("px", ""))
+        parseInt(blocks[j].style.height) <
+        parseInt(blocks[min_ind].style.height)
       ) {
         min_ind = j;
       }
       blocks[j].style.background = "cyan";
     }
-    await swapSelection(blocks[i], blocks[min_ind]);
+    await swapTwo(blocks[i], blocks[min_ind]);
     blocks[min_ind].style.background = "cyan";
     blocks = document.querySelectorAll(".block");
   }
   enableButtons();
 }
+
+/*******************************************************/
+/**********************QUICK SORT***********************/
+/*******************************************************/
 
 async function quickSort() {
   let blocks = document.querySelectorAll(".block");
@@ -171,57 +183,63 @@ async function quickSort() {
 
 async function quickSortHelper(blocks, strtIdx, endIdx) {
   if (strtIdx >= endIdx) return;
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, anim_speed * 10);
-  });
   const pivotIdx = strtIdx;
-  let leftIdx = strtIdx;
+  blocks[pivotIdx].style.background = "#FFD933";
+  let leftIdx = strtIdx + 1;
   let rightIdx = endIdx;
   while (rightIdx >= leftIdx) {
+    blocks[leftIdx].style.background = "#ff105e";
+    blocks[rightIdx].style.background = "#ff105e";
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, Math.pow(10, anim_speed.value));
+    });
     if (
       parseInt(blocks[leftIdx].style.height) >
         parseInt(blocks[pivotIdx].style.height) &&
       parseInt(blocks[rightIdx].style.height) <
         parseInt(blocks[pivotIdx].style.height)
     ) {
-      await swapSelection(blocks[leftIdx], blocks[rightIdx]);
+      await swapTwo(blocks[leftIdx], blocks[rightIdx]);
       blocks = document.querySelectorAll(".block");
+      blocks[leftIdx].style.background = "cyan";
+      blocks[rightIdx].style.background = "cyan";
     }
 
     if (
       parseInt(blocks[leftIdx].style.height) <=
       parseInt(blocks[pivotIdx].style.height)
     ) {
+      blocks[leftIdx].style.background = "cyan";
       leftIdx++;
+      if (leftIdx < blocks.length) blocks[leftIdx].style.background = "#ff105e";
     }
 
     if (
       parseInt(blocks[rightIdx].style.height) >=
       parseInt(blocks[pivotIdx].style.height)
     ) {
+      blocks[rightIdx].style.background = "cyan";
       rightIdx--;
+      blocks[rightIdx].style.background = "#ff105e";
     }
   }
-  await swapSelection(blocks[pivotIdx], blocks[rightIdx]);
+
+  await swapTwo(blocks[pivotIdx], blocks[rightIdx]);
+  blocks[pivotIdx].style.background = "cyan";
+  blocks[rightIdx].style.background = "cyan";
+  if (leftIdx < blocks.length) blocks[leftIdx].style.background = "cyan";
   blocks = document.querySelectorAll(".block");
+
   const leftSubarrayIsSmaller =
     rightIdx - 1 - strtIdx < endIdx - (rightIdx + 1);
   if (leftSubarrayIsSmaller) {
     await quickSortHelper(blocks, strtIdx, rightIdx - 1);
     await quickSortHelper(blocks, rightIdx + 1, endIdx);
-    // await Promise.all([
-    //   quickSortHelper(blocks, strtIdx, rightIdx - 1),
-    //   quickSortHelper(blocks, rightIdx + 1, endIdx),
-    // ]);
   } else {
     await quickSortHelper(blocks, rightIdx + 1, endIdx);
     await quickSortHelper(blocks, strtIdx, rightIdx - 1);
-    // await Promise.all([
-    //   quickSortHelper(blocks, rightIdx + 1, endIdx),
-    //   quickSortHelper(blocks, strtIdx, rightIdx - 1),
-    // ]);
   }
 }
 
