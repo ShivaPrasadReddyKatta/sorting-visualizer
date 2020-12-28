@@ -163,6 +163,68 @@ async function selectionSort() {
   enableButtons();
 }
 
+async function quickSort() {
+  let blocks = document.querySelectorAll(".block");
+  await quickSortHelper(blocks, 0, blocks.length - 1);
+  enableButtons();
+}
+
+async function quickSortHelper(blocks, strtIdx, endIdx) {
+  if (strtIdx >= endIdx) return;
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, anim_speed * 10);
+  });
+  const pivotIdx = strtIdx;
+  let leftIdx = strtIdx;
+  let rightIdx = endIdx;
+  while (rightIdx >= leftIdx) {
+    if (
+      parseInt(blocks[leftIdx].style.height) >
+        parseInt(blocks[pivotIdx].style.height) &&
+      parseInt(blocks[rightIdx].style.height) <
+        parseInt(blocks[pivotIdx].style.height)
+    ) {
+      await swapSelection(blocks[leftIdx], blocks[rightIdx]);
+      blocks = document.querySelectorAll(".block");
+    }
+
+    if (
+      parseInt(blocks[leftIdx].style.height) <=
+      parseInt(blocks[pivotIdx].style.height)
+    ) {
+      leftIdx++;
+    }
+
+    if (
+      parseInt(blocks[rightIdx].style.height) >=
+      parseInt(blocks[pivotIdx].style.height)
+    ) {
+      rightIdx--;
+    }
+  }
+  await swapSelection(blocks[pivotIdx], blocks[rightIdx]);
+  blocks = document.querySelectorAll(".block");
+  const leftSubarrayIsSmaller =
+    rightIdx - 1 - strtIdx < endIdx - (rightIdx + 1);
+  if (leftSubarrayIsSmaller) {
+    await quickSortHelper(blocks, strtIdx, rightIdx - 1);
+    await quickSortHelper(blocks, rightIdx + 1, endIdx);
+    // await Promise.all([
+    //   quickSortHelper(blocks, strtIdx, rightIdx - 1),
+    //   quickSortHelper(blocks, rightIdx + 1, endIdx),
+    // ]);
+  } else {
+    await quickSortHelper(blocks, rightIdx + 1, endIdx);
+    await quickSortHelper(blocks, strtIdx, rightIdx - 1);
+    // await Promise.all([
+    //   quickSortHelper(blocks, rightIdx + 1, endIdx),
+    //   quickSortHelper(blocks, strtIdx, rightIdx - 1),
+    // ]);
+  }
+}
+
 //This function is used to run appropriate algorithm based on the user input
 function approAlgo() {
   disableButtons();
@@ -178,6 +240,9 @@ function approAlgo() {
       break;
     case "insertion":
       insertionSort();
+      break;
+    case "quick":
+      quickSort();
       break;
   }
 }
