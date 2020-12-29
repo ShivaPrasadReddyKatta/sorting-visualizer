@@ -227,10 +227,10 @@ async function quickSortHelper(blocks, strtIdx, endIdx) {
   }
 
   await swapTwo(blocks[pivotIdx], blocks[rightIdx]);
+  blocks = document.querySelectorAll(".block");
   blocks[pivotIdx].style.background = "cyan";
   blocks[rightIdx].style.background = "cyan";
   if (leftIdx < blocks.length) blocks[leftIdx].style.background = "cyan";
-  blocks = document.querySelectorAll(".block");
 
   const leftSubarrayIsSmaller =
     rightIdx - 1 - strtIdx < endIdx - (rightIdx + 1);
