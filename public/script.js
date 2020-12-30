@@ -46,36 +46,24 @@ function generateBlocks(size = 20) {
   enableButtons();
 }
 
-//This swap function is used for bubble sort and insertion sort
-function swapOne(el1, el2) {
+//This swap function is used to interchange heights of the passed elements.
+//It is used for all agorithms except for merge sort.
+function swap(el1, el2) {
   return new Promise(function (resolve) {
-    const transform1 = el1.style.transform;
-    const transform2 = el2.style.transform;
-    el1.style.transform = transform2;
-    el2.style.transform = transform1;
+    // const transform1 = el1.style.transform;
+    // const transform2 = el2.style.transform;
+    // el1.style.transform = transform2;
+    // el2.style.transform = transform1;
+    // const siblingA = el1.nextSibling === el2 ? el1 : el1.nextSibling;
 
     window.requestAnimationFrame(function () {
       setTimeout(() => {
-        container.insertBefore(el2, el1);
-        resolve();
-      }, Math.pow(10, anim_speed.value));
-    });
-  });
-}
+        // container.insertBefore(el1, el2);
+        // container.insertBefore(el2, siblingA);
+        let temp = el1.style.height;
+        el1.style.height = el2.style.height;
+        el2.style.height = temp;
 
-//This swap function is for selection sort and quick sort
-function swapTwo(el1, el2) {
-  return new Promise(function (resolve) {
-    const transform1 = el1.style.transform;
-    const transform2 = el2.style.transform;
-    el1.style.transform = transform2;
-    el2.style.transform = transform1;
-    const siblingA = el1.nextSibling === el2 ? el1 : el1.nextSibling;
-
-    window.requestAnimationFrame(function () {
-      setTimeout(() => {
-        container.insertBefore(el1, el2);
-        container.insertBefore(el2, siblingA);
         resolve();
       }, Math.pow(10, anim_speed.value));
     });
@@ -100,7 +88,7 @@ async function bubbleSort() {
       if (
         parseInt(blocks[j].style.height) > parseInt(blocks[j + 1].style.height)
       ) {
-        await swapOne(blocks[j], blocks[j + 1]);
+        await swap(blocks[j], blocks[j + 1]);
         blocks = document.querySelectorAll(".block");
       }
       blocks[j].style.background = "cyan";
@@ -129,7 +117,7 @@ async function insertionSort() {
     ) {
       blocks[j].style.background = "#ff105e";
       blocks[j - 1].style.background = "#ff105e";
-      await swapOne(blocks[j - 1], blocks[j]);
+      await swap(blocks[j - 1], blocks[j]);
       blocks = document.querySelectorAll(".block");
       j--;
       blocks[j].style.background = "cyan";
@@ -164,8 +152,8 @@ async function selectionSort() {
       }
       blocks[j].style.background = "cyan";
     }
-    await swapTwo(blocks[i], blocks[min_ind]);
-    blocks[min_ind].style.background = "cyan";
+    await swap(blocks[i], blocks[min_ind]);
+    blocks[i].style.background = "cyan";
     blocks = document.querySelectorAll(".block");
   }
   enableButtons();
@@ -201,7 +189,7 @@ async function quickSortHelper(blocks, strtIdx, endIdx) {
       parseInt(blocks[rightIdx].style.height) <
         parseInt(blocks[pivotIdx].style.height)
     ) {
-      await swapTwo(blocks[leftIdx], blocks[rightIdx]);
+      await swap(blocks[leftIdx], blocks[rightIdx]);
       blocks = document.querySelectorAll(".block");
       blocks[leftIdx].style.background = "cyan";
       blocks[rightIdx].style.background = "cyan";
@@ -226,7 +214,7 @@ async function quickSortHelper(blocks, strtIdx, endIdx) {
     }
   }
 
-  await swapTwo(blocks[pivotIdx], blocks[rightIdx]);
+  await swap(blocks[pivotIdx], blocks[rightIdx]);
   blocks = document.querySelectorAll(".block");
   blocks[pivotIdx].style.background = "cyan";
   blocks[rightIdx].style.background = "cyan";
@@ -243,6 +231,69 @@ async function quickSortHelper(blocks, strtIdx, endIdx) {
   }
 }
 
+/*******************************************************/
+/**********************MERGE SORT***********************/
+/*******************************************************/
+
+//This is a swap function used to interchange the elements.
+//It is used exclusively for merge sort.
+function swapMerge(el1, el2) {
+  return new Promise((resolve) => {
+    window.requestAnimationFrame(function () {
+      setTimeout(() => {
+        container.insertBefore(el2, el1);
+        resolve();
+      }, Math.pow(10, anim_speed.value));
+    });
+  });
+}
+
+async function merge(leftHalf, rightHalf) {
+  const sortedArray = new Array(leftHalf.length + rightHalf.length);
+  let i = 0;
+  let j = 0;
+  let k = 0;
+  let divs = [...document.querySelectorAll(".block")];
+  while (i < leftHalf.length && j < rightHalf.length) {
+    if (
+      parseInt(leftHalf[i].style.height) <= parseInt(rightHalf[j].style.height)
+    ) {
+      sortedArray[k++] = leftHalf[i++];
+    } else {
+      await swapMerge(
+        divs[divs.indexOf(leftHalf[i])],
+        divs[divs.indexOf(rightHalf[j])]
+      );
+      divs = [...document.querySelectorAll(".block")];
+      sortedArray[k++] = rightHalf[j++];
+    }
+  }
+  while (i < leftHalf.length) {
+    sortedArray[k++] = leftHalf[i++];
+    // sortedArray.push(leftHalf[i++]);
+  }
+  while (j < rightHalf.length) {
+    sortedArray[k++] = rightHalf[j++];
+    // sortedArray.push(rightHalf[j++]);
+  }
+  return sortedArray;
+}
+
+async function mergeSort(array) {
+  if (array.length <= 1) return array;
+  const middleIdx = Math.floor(array.length / 2);
+  const leftHalf = array.slice(0, middleIdx);
+  const rightHalf = array.slice(middleIdx);
+  // console.log(leftHalf);
+  // console.log(rightHalf);
+  return await merge(await mergeSort(leftHalf), await mergeSort(rightHalf));
+}
+
+async function mergeMain() {
+  let blocks = [...document.querySelectorAll(".block")];
+  const bl = await mergeSort(blocks);
+  enableButtons();
+}
 //This function is used to run appropriate algorithm based on the user input
 function approAlgo() {
   disableButtons();
@@ -261,6 +312,9 @@ function approAlgo() {
       break;
     case "quick":
       quickSort();
+      break;
+    case "merge":
+      mergeMain();
       break;
   }
 }
