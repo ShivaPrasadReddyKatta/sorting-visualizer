@@ -17,6 +17,7 @@ arr_size.addEventListener(
 
 //Function to disable all the buttons while an algorithm is running to make things simple and easy.
 function disableButtons() {
+  document.querySelector("#arr-size").disabled = true;
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].disabled = true;
   }
@@ -24,6 +25,7 @@ function disableButtons() {
 
 //Function to enable all the buttons after an algorithm finishes running.
 function enableButtons() {
+  document.querySelector("#arr-size").disabled = false;
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].disabled = false;
   }
@@ -294,33 +296,89 @@ async function mergeMain() {
   const bl = await mergeSort(blocks);
   enableButtons();
 }
+
+/*******************************************************/
+/***************ALGORITHM DEFINITIONS*******************/
+/*******************************************************/
+function bubbleSortText() {
+  document.querySelector("footer h2").innerHTML = "Bubble Sort";
+  document.querySelector("footer h4").innerHTML =
+    "Average: O(n^2) time | O(1) space";
+  document.querySelector("footer p").innerHTML =
+    "It is a simple sorting algorithm that works by repeatedly cycling through the entire set of elements and swapping the adjacent elements only if they are in wrong order.";
+}
+
+function insertionSortText() {
+  document.querySelector("footer h2").innerHTML = "Insertion Sort";
+  document.querySelector("footer h4").innerHTML =
+    "Average: O(n^2) time | O(1) space";
+  document.querySelector("footer p").innerHTML =
+    "Insertion sort works by virtually dividing the array into a sorted and an unsorted part where sorted part is empty first. The elements are transferred from the unsorted list to the sorted list one at a time to the correct position.";
+}
+
+function selectionSortText() {
+  document.querySelector("footer h2").innerHTML = "Selection Sort";
+  document.querySelector("footer h4").innerHTML =
+    "Average: O(n^2) time | O(1) space";
+  document.querySelector("footer p").innerHTML =
+    "In Selection sort the input list is virtually divided into a sorted and an unsorted part where sorted part is empty first. In each iteration, the algorithm finds the min or max element in the unsorted part, places it at the beginning of the unsorted list, and moves the boundaries one element to the right.";
+}
+
+function quickSortText() {
+  document.querySelector("footer h2").innerHTML = "Quick Sort";
+  document.querySelector("footer h4").innerHTML =
+    "Average: O(nlog(n)) time | O(log(n)) space";
+  document.querySelector("footer p").innerHTML =
+    "Quick sort is a divide-and-conquer algorithm where a pivot point is selected from the array first and all the elements are reordered such that the elements smaller that pivot are moved to the left and larger ones to the right. Now, the quick sort is recursively called on the subarrays until the entire array is sorted.";
+}
+
+function mergeSortText() {
+  document.querySelector("footer h2").innerHTML = "Merge Sort";
+  document.querySelector("footer h4").innerHTML =
+    "Average: O(nlog(n)) time | O(nlog(n)) space";
+  document.querySelector("footer p").innerHTML =
+    "Merge sort is a divide-and-conquer algorithm where the input array is divided into two halves, merge sort is recursively called on those two halves, and they are merged into a final sorted sequence.";
+}
+
+function defaultText() {
+  document.querySelector("footer h2").innerHTML = "About";
+  document.querySelector("footer h4").innerHTML = "";
+  document.querySelector("footer p").innerHTML =
+    "Visualize popular sorting algorithms by simply clicking the appropriate button at the top of the page. You can also adjust the size of the array and also the animation speed using the sliders provided above. Please note that once the visualization starts, all the buttons and the array size slider are disabled, and will only be available once the algorithm finishes running. However, you can adjust the animation speed even when the algorithm is executing. Happy visualization ✌";
+}
 //This function is used to run appropriate algorithm based on the user input
 function approAlgo() {
   disableButtons();
   switch (this.className) {
     case "new-array":
+      defaultText();
       generateBlocks(arr_size.value);
       break;
     case "bubble":
       bubbleSort();
+      bubbleSortText();
       break;
     case "selection":
       selectionSort();
       break;
     case "insertion":
       insertionSort();
+      insertionSortText();
       break;
     case "quick":
       quickSort();
+      quickSortText();
       break;
     case "merge":
       mergeMain();
+      mergeSortText();
       break;
   }
 }
 
 //Here we are calling the generate blocks function
 generateBlocks(arr_size.value);
+defaultText();
 
 //Adding event listeners to the buttons and running appropriate algorithm based on user input
 for (let i = 0; i < buttons.length; i++) {

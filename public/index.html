@@ -7,39 +7,46 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Sorting Visualizer</h1>
-    <div class="algorithms-container">
-      <div class="algorithms">
-        <div class="array-size">
-          <label for="arr-size">Array Size</label
-          ><input
-            type="range"
-            name="arraysize"
-            id="arr-size"
-            min="10"
-            max="200"
-          />
-        </div>
-        <div class="animation-speed">
-          <label for="anim-speed">Anim Speed</label
-          ><input
-            type="range"
-            name="animation speed"
-            id="anim-speed"
-            min="0"
-            max="3"
-          />
-        </div>
-        <button class="new-array">New Array</button>
+    <main>
+      <h1>Sorting Visualizer</h1>
+      <div class="algorithms-container">
+        <div class="algorithms">
+          <div class="array-size">
+            <label for="arr-size">Array Size</label
+            ><input
+              type="range"
+              name="arraysize"
+              id="arr-size"
+              min="10"
+              max="200"
+            />
+          </div>
+          <div class="animation-speed">
+            <label for="anim-speed">Anim Speed</label
+            ><input
+              type="range"
+              name="animation speed"
+              id="anim-speed"
+              min="0"
+              max="3"
+            />
+          </div>
+          <button class="new-array">New Array</button>
 
-        <button class="bubble">Bubble</button>
-        <button class="insertion">Insertion</button>
-        <button class="selection">Selection</button>
-        <button class="quick">Quick</button>
-        <button class="merge">Merge</button>
+          <button class="bubble">Bubble</button>
+          <button class="insertion">Insertion</button>
+          <button class="selection">Selection</button>
+          <button class="quick">Quick</button>
+          <button class="merge">Merge</button>
+        </div>
       </div>
-    </div>
-    <div class="data-container"></div>
+      <div class="data-container"></div>
+    </main>
+    <footer>
+      <h2></h2>
+      <h4></h4>
+      <p></p>
+    </footer>
     <script src="script.js"></script>
   </body>
 </html>
