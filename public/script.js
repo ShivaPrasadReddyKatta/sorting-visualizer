@@ -360,6 +360,7 @@ function approAlgo() {
       break;
     case "selection":
       selectionSort();
+      selectionSortText();
       break;
     case "insertion":
       insertionSort();
