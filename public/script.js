@@ -38,7 +38,7 @@ function generateBlocks(size = 20) {
     const value = Math.floor(Math.random() * 100 + 1);
     const block = document.createElement("div");
     block.classList.add("block");
-    block.style.height = `${value * 7}px`;
+    block.style.height = `${value}%`;
     block.style.width = `${100 / size - 0.1}%`;
     // block.style.transition = `all ${anim_speed.value * 0.01}s ease`;
     container.appendChild(block);
